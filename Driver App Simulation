@@ -1,0 +1,148 @@
+import java.util.Scanner;
+
+/*Name: Max Santomauro
+* Class: CS1150 #007
+* Due: Oct 17, 2024*/
+
+// Objective: Write a program that simulates an app for a driver of Uber, Lyft, etc.
+
+public class SantomauroMaxAssignment7 {
+	
+	public static void main(String[] args) {
+		
+		// Initialize daily counter variables here
+		int totalNumTrips = 0;
+		int totalNumPassengers = 0;
+		int totalNumMiles = 0;
+		double totalNumMinutes = 0;
+		double totalFare = 0;
+		
+		Scanner driver = new Scanner(System.in);
+		
+		System.out.println("Welcome to Uber Driver App");   // Display a welcome for the Driver App
+		
+		// create a loop that allows the driver to repeatedly pick up passengers
+		boolean continueDriving = pickupPassengers(driver);
+		while (continueDriving) {
+			
+			// Initialize variables here and equal them to the methods called
+			int numPassengers = numberOfPassengers();
+			int numMiles = numberOfMiles();
+			int averageMph = averageMilesPerHour();
+			double numMinutes = computeNumberOfMinutes(numMiles, averageMph);
+			double fare = computeFare(numPassengers, numMiles, numMinutes);
+			
+			// Add up counters here for each time the driver decides to pick up passengers
+			
+			totalNumTrips++;
+            totalNumPassengers += numPassengers;
+            totalNumMiles += numMiles;
+            totalNumMinutes += numMinutes;
+            totalFare += fare;		
+			
+            // Display trip total every time the driver decides to pick up passengers
+			displayDailyTotals(numPassengers, averageMph, numMiles, numMinutes, fare);
+			
+			// return user to pickupPasengers method to continue picking up passengers if they 
+			// continue typing "Y" or "y"
+			continueDriving = pickupPassengers(driver);
+		}
+		
+		// display daily total after driver stops picking up drivers
+		displayTripTotals(totalNumTrips, totalNumPassengers, totalNumMiles, totalNumMinutes, totalFare);
+	}
+
+	// Prompt driver to pick up more passengers.
+	public static boolean pickupPassengers(Scanner driver) {
+		char response;
+		while (true)  {
+			System.out.print("Pick up passengers (Y/N)? "); // Prompt driver if they want to pick up passengers
+			response = driver.next().charAt(0);
+			if(response == 'Y' || response == 'y') {
+				return true;
+			}
+			else if(response == 'N' || response == 'n') {
+				return false;
+			}
+			else {
+				System.out.println(response + " is not a valid entry - try again");
+			}
+		}
+	}
+	
+	// Randomly generate the number of passengers for the trip (between 1 & 5)
+	public static int numberOfPassengers() {
+		int passengerNum = 1 + (int)(Math.random() * 5);
+		return passengerNum;
+	}
+	
+	// Randomly generate the number of miles for the trip (between 1 & 20 miles)
+	public static int numberOfMiles() {
+		int mileNum = 1 + (int)(Math.random() * 20);
+		return mileNum;
+	}
+	
+	// Randomly generate average miles per hour for trip (between 30 mph & 60 mph)
+	public static int averageMilesPerHour() {
+		int mPH = 30 + (int)(Math.random() * 31);
+		return mPH;
+	}
+	
+	// Compute how long the trip takes in minutes.
+	public static double computeNumberOfMinutes(int numMiles, double averageMph) {
+		double distanceMinutes = (double) ((numMiles / averageMph) * 60);
+		return distanceMinutes;
+	}
+
+	// Compute the fare for the trip
+	// Cost per mile = $1.75, cost per minute = $0.50, base fare = $.7.50
+	// Add $1.00 per passenger if there are 3 or more people
+	// Add total fare is $7.50 if the fare is less than $7.50
+	// The base fair of $7.50 is added to total fare if total fair is more then $7.50.
+	public static double computeFare(int numPassengers, int numMiles, double numMinutes) {
+		double fare = numMiles * 1.75 + numMinutes * 0.50;
+		double fareBase = 7.50;
+		if (numPassengers >= 3) {
+			fare += numPassengers;
+		}
+		// Determine if the fare is less or equal the fare base or and return the total fare.
+		// Otherwise, return the total fare with $7.50 added to the total fare.
+		double totalFare = fare + fareBase;
+		double result = Math.max(totalFare, fareBase);
+		
+		return result;
+	}
+	
+	// Displays the results for one trip 
+	public static void displayDailyTotals(int numPassengers, int averageMph, int numMiles,
+										                   double numMinutes, double fare) {
+		System.out.println("***********************************************\n"
+                          + "Current Trip Totals\n"
+						  + "***********************************************");
+        System.out.printf("Number of passengers: %d\n", numPassengers);
+        System.out.printf("Average mph:          %d\n", averageMph);
+        System.out.printf("Number of miles:      %d\n", numMiles);
+
+	}
+	
+	// Displays the results for all trips combined
+	public static void displayTripTotals(int totalNumTrips, int totalNumPassengers, 
+	int totalNumMiles, double totalNumMinutes,         
+	double totalFare) {
+		System.out.println("\n\n***********************************************\n"
+                          + "Totals for Today\n"
+                          + "***********************************************");
+        System.out.printf("Total number of trips:      %d\n", totalNumTrips);
+        System.out.printf("Total number of passengers: %d\n", totalNumPassengers);
+        System.out.printf("Total number of miles:      %d\n", totalNumMiles);
+        System.out.printf("Total number of minutes:    %.2f\n", totalNumMinutes);
+        System.out.printf("Total collected fare:       %.2f\n", totalFare);
+        System.out.println("-----------------------------------------------");	
+	}
+}
+
+
+
+ 
+
+ 
