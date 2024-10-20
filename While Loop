@@ -1,0 +1,83 @@
+import java.util.Scanner;
+
+/*Assignment Description
+In this assignment, I will write a simple while loop. It will involve prompting
+the user for an unspecified number of integers, positive or negative. The number
+0 will be used as a sentinel value to indicate the end of the list of values.*/
+
+public class SantomauroMaxAssignment5 {
+
+	public static void main(String[] args) {
+		Scanner user = new Scanner(System.in);
+		
+		//Create integer variables and equal them to 0.
+		int smallestCount = 0;
+		int largestCount = 0;
+		int smallest = 0;
+		int largest = 0;
+		int totalSum = 0;
+		int totalCount = 0;
+		
+		//Prompt the user for any number integers and assign the numbers to number 
+		System.out.println("Enter number and end the last number with 0: ");
+		int number = user.nextInt();
+		
+		/* Display the phrase "No numbers were entered except 0" if the first
+		 * number is 0.*/
+		if (number == 0) {
+			System.out.println("No numbers were entered except 0");
+			user.close();
+			return;
+		}
+		
+		/*Intitialize the smallest, largest, and totalSum variables with the first
+		 * number variable and initialize the smallestCount, largestCount, and
+		 * totalCount variables with the number 1.*/
+		smallestCount = 1;
+		largestCount = 1;
+		smallest = number;
+		largest = number;
+		totalSum = number;
+		totalCount = 1;
+		
+		
+		/*Create a while loop that will process every number entered by the user
+		 * until a number 0 is entered.*/
+		while (number != 0) {
+			number = user.nextInt(); //User prompting of integers continues
+			
+			// Process totalSum and TotalCount variables
+			totalSum += number;
+			totalCount++;
+			
+			// Update smallest and smallestCount
+			if (number < smallest && number != 0) {
+				smallest = number;
+				smallestCount = 1;   //Reset count for new smallestCount
+			}
+			else if (number == smallest && number != 0) {
+				smallestCount++;    // Increment smallestCount
+			}
+			
+			// Update largest and largestCount
+			if (number > largest) {
+				largest = number;
+				largestCount = 1;   //Reset count for new largetCount
+			}
+			else if (number == largest) {
+				largestCount++;    // Increment largestCount
+			}		
+		}
+		// Output results
+		System.out.printf("Number of value entered = %d\n", totalCount);
+		System.out.printf("Smallest value entered = %d appeared %d times\n", smallest, smallestCount);
+		System.out.printf("Largest value entered = %d appeared %d times\n", largest, largestCount);
+		System.out.printf("Sum of all numbers = %d\n", totalSum);
+
+		//Compute and display the average
+		double average = (double) totalSum / totalCount;
+		System.out.printf("Average = %.2f\n", average);
+		
+		user.close();
+	}
+}
