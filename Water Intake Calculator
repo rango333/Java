@@ -1,0 +1,120 @@
+import java.util.Scanner;
+import java.lang.Math;
+/*
+* Name: Max Santomauro
+* Class: CS1150 #007
+* Due: Sept 12, 2024
+* For this assignment I will create a “water intake calculator” that approximates
+* the amount of water required for two people who exercise. The program also computes
+* the difference between several values for these two people.
+*/
+
+public class SantomauroMaxAssignment2 {
+/*I will create a “water intake calculator” that approximates the 
+ *amount of water required for two people who exercise.*/
+	
+	public static void main(String[] args) {
+			
+		// Input the first person's and second person's names and weight
+		
+		
+		Scanner reply = new Scanner(System.in);
+		
+		
+		
+		String Name_firstperson;
+		String Name_secondperson;
+		double First_person_weight;
+		double Second_person_weight;
+		System.out.println("Enter name of first person: ");
+		Name_firstperson = reply.nextLine();
+
+		System.out.println("Enter name of second person: ");
+		Name_secondperson = reply.nextLine();
+		
+		System.out.println("Enter weight of first person: ");
+		First_person_weight = reply.nextDouble();
+		
+		System.out.println("Enter weight of first person: ");
+		Second_person_weight = reply.nextInt();
+		
+		
+		
+		
+		final double DAILY_WATER_RATIO = 0.67;
+        final double OUNCES_PER_CUP = 8.0;
+		double first_person_ounces = First_person_weight * DAILY_WATER_RATIO;
+		double second_person_ounces = Second_person_weight * DAILY_WATER_RATIO;
+		double first_person_cups = first_person_ounces / OUNCES_PER_CUP;
+		double second_person_cups = second_person_ounces / OUNCES_PER_CUP;
+		
+		// I will now determine how much additional water in cup is required 
+
+		
+		double excercise_time_minutes = 30;
+		double excercise_water_amount = 12;
+		double first_person_excercise_time;
+		double second_person_excercise_time;
+		
+		System.out.println("Enter excercise time for first person: ");
+		first_person_excercise_time = reply.nextDouble();
+		System.out.println("Enter excercise time for second person: ");
+		second_person_excercise_time = reply.nextDouble();
+		
+		reply.close();
+		
+		double first_person_extra_water_ounces_needed = first_person_excercise_time / excercise_time_minutes * excercise_water_amount;
+		double second_person_extra_water_ounces_needed = second_person_excercise_time / excercise_time_minutes * excercise_water_amount;
+		double first_person_extra_water_cups_needed = first_person_extra_water_ounces_needed / OUNCES_PER_CUP;
+		double second_person_extra_water_cups_needed = second_person_extra_water_ounces_needed / OUNCES_PER_CUP;
+		
+		/* Now I will determine the total daily water requirements for both
+		 * people when excercising.*/
+		
+		double first_person_total_water_needed = first_person_cups + first_person_extra_water_cups_needed;
+		double second_person_total_water_needed = second_person_cups + second_person_extra_water_cups_needed;
+		
+		// I outputted the information of both people and the differences in table format
+		
+		System.out.println("Person #1 Information:\n" 
+		                 + "-------------------------"); 
+		System.out.println("Enter 1st person's name: "+ Name_firstperson);
+		System.out.println("Enter 1st person's weight: " + First_person_weight);
+		System.out.println("Enter 1st person's exercise minutes: " + first_person_excercise_time + "\n");
+		
+		System.out.println("Person #2 Information:\n" 
+                + "-------------------------"); 
+		System.out.println("Enter 2st person's name: "+ Name_secondperson);
+		System.out.println("Enter 2st person's weight: " + Second_person_weight);
+		System.out.println("Enter 2st person's exercise minutes: " + second_person_excercise_time + "\n\n");
+		             
+		
+		System.out.println("*************************************************************************************\n" 
+                         + "                                Water Intake Calculator                              \n" 
+		                 + "*************************************************************************************\n\n"
+		                 + "Person	       Weight     Exercise      Daily Water    Exercise Water     Total Water\n"
+		                 + "               (lbs)        (min)         (cups)          (cups)             (cups)\n"
+		                 + "-------------------------------------------------------------------------------------");
+		System.out.println(Name_firstperson);
+		System.out.printf("                %.0f", First_person_weight);
+		System.out.printf("          %.0f", first_person_excercise_time);
+		System.out.printf("            %.2f", first_person_cups);
+		System.out.printf("           %.2f", first_person_extra_water_cups_needed);
+		System.out.printf("               %.2f\n\n", first_person_total_water_needed);
+		System.out.println("-------------------------------------------------------------------------------------");
+		System.out.println(Name_secondperson);
+		System.out.printf("                %.0f", Second_person_weight);
+		System.out.printf("          %.0f", second_person_excercise_time);
+		System.out.printf("            %.2f", second_person_cups);
+		System.out.printf("           %.2f", second_person_extra_water_cups_needed);
+		System.out.printf("               %.2f\n\n", second_person_total_water_needed);
+		System.out.println("-------------------------------------------------------------------------------------");
+		System.out.println("Differences");
+		System.out.printf("                %.0f", Math.abs(First_person_weight - Second_person_weight));
+		System.out.printf("           %.0f", Math.abs(first_person_excercise_time - second_person_excercise_time));
+		System.out.printf("             %.2f", Math.abs(first_person_cups - second_person_cups));
+		System.out.printf("           %.2f", Math.abs(first_person_extra_water_cups_needed - second_person_extra_water_cups_needed));
+		System.out.printf("                %.2f\n\n", Math.abs(first_person_total_water_needed - second_person_total_water_needed));
+		
+	} // main
+} // Assignment 2
