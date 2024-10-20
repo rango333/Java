@@ -1,0 +1,128 @@
+import java.util.Scanner;
+
+/*Name: Max Santomauro
+* Class: CS1150 #007
+* Due: Sept 26, 2024*/
+
+/*Write a program to generate credit card numbers for 3 companies: Visa,
+ * American Express, and Discover.  .  The program will prompt the user
+ * to enter two values - a character and a number.  Next the program will
+ * display a randomly generated credit card number based on the two
+ * values obtained from the user.*/
+
+public class SantomauroMaxAssignment4 {
+
+	public static void main(String[] args) {
+	
+		/*Assign constant character data types to the card type variables “Visa1,” “Visa2,”
+		 * “American_Express1,” “American_Express2,” “Discover1,” and “Discover2”. Then
+		 * equal the variables to a character.*/
+		final char Visa1 = 'V';
+		final char Visa2 = 'v';
+		final char American_Express1 = 'A';
+		final char American_Express2 = 'a';
+		final char Discover1 = 'D';
+		final char Discover2 = 'd';
+		
+		/*Assign constant integer data types to the card level variables “Regular.” “Gold,”
+		 * and “Platinum.” Then equal the variables to an integer*/
+		final int Regular = 1;
+		final int Gold = 2;
+		final int Platinum = 3;
+		
+		/*Assign string data types to one, two, and three variables and equal them to the
+		 * card level name within parentheses.*/
+		String one = "(Regular)";
+		String two = "(Gold)";
+		String three = "(Platinum)";
+		
+		/*Assign double data types to variables randomNum1, randmNum2, randomNum3, and randomNum4
+		 * and equal them to the Math.random() method.*/
+		double randomNum1 = Math.random();
+		double randomNum2 = Math.random();
+		double randomNum3 = Math.random();
+		double randomNum4 = Math.random();
+
+		/*Assign double data types to the variables randomNum1, randomNum2, randomNum3,
+		 *and randomNum4, equal them to the integer converted variables randonNum1, randomNum2, 
+		 *randomNum3, and randomNum4, multiply them by 10000, and make sure they obtain no random
+		 *numbers under 1000*/
+		int randomInt1 = 999 + (int)(randomNum1 * 10000);
+		int randomInt2 = 999 + (int)(randomNum2 * 10000);
+		int randomInt3 = 999 + (int)(randomNum3 * 10000);
+		int randomInt4 = 999 + (int)(randomNum4 * 10000);
+		
+		// Display the menu of card options.
+		System.out.println("Card type\n"
+				         + "V: Visa   A: American Express   D: Discover\n\n"
+				         + "Card level\n"
+				         + "1: Regular   2: Gold   3: Platinum\n\n"
+				         + "*Example user choice: \"V2\". Which is Visa and Gold.");
+		
+		// Prompt user for the card type.
+		Scanner card = new Scanner(System.in);
+		
+		System.out.println("Enter a card type (upper or lower case)\n");
+		char type = card.next().charAt(0);
+		
+		//End the program if the user enters the wrong card type.
+				if (!(type == Visa1 || type == Visa2 || type == American_Express1 || 
+					type == American_Express2 || type == Discover1 || type == Discover2)) {
+					System.out.println("Invalid card type entry");
+					System.exit(0);
+				}
+		
+		// Prompt user for the card level.		
+		System.out.println("Enter a card level\n");
+		int level = card.nextInt();
+		
+		//End the program if the user enters the wrong card level.
+		if (!(level == 1 || level == 2 || level ==3)){
+			System.out.println("Invalid card level entry");
+			System.exit(0);
+		}
+		
+		//Display user entries as a string
+		
+		System.out.printf("%C%d\n", type, level);
+		
+		// Display the card type with the four random numbers and the card level
+		if(type == Visa1 || type == Visa2){
+			if(level == Regular) {
+				System.out.printf("Visa %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, one);
+			}
+			else if(level == Gold) {
+				System.out.printf("Visa %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, two);
+			}
+			else if(level == Platinum) {
+				System.out.printf("Visa %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, three);
+			}
+				
+		}
+		else if(type == American_Express1 || type == American_Express2){
+			if(level == Regular) {
+				System.out.printf("American Express %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, one);
+			}
+			else if(level == Gold) {
+				System.out.printf("American Express %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, two);
+			}
+			else if(level == Platinum) {
+				System.out.printf("American Express %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, three);
+			}
+				
+		}
+		else if(type == Discover1 || type == Discover2){
+			if(level == Regular) {
+				System.out.printf("Discover %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, one);
+			}
+			else if(level == Gold) {
+				System.out.printf("Discover %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, two);
+			}
+			else if(level == Platinum) {
+				System.out.printf("Discover %d %d %d %d %s", randomInt1, randomInt2, randomInt3, randomInt4, three);
+			}
+				
+		}
+		card.close();
+	}
+}
