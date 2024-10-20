@@ -1,0 +1,118 @@
+import java.util.Scanner;
+
+/*Name: Max Santomauro
+* Class: CS1150 #007
+* Due: Sept 19, 2024
+* I created a "very" simple Smoothie Bar that allows an employee to take an order and
+* produce a receipt. The program reports the type of smoothie the customer ordered,
+* any “add-in” that was selected, taxes, and total cost. The program handles
+* invalid user selections.*/
+
+public class SantomauroMaxAssignment3 {
+
+	public static void main(String[] args) {
+		
+		/*first I will assign a constant double data type to the variable TAX_RATE and
+		 * equal the variable to 8.15 divided by 100.*/
+		final double TAX_RATE = (8.15 / 100);
+		
+		/* I assigned s string data types to a smoothie choice variable and equal it to
+		 * an empty string.*/
+		String Smoothie_Choice = "";
+		
+		/* I assigned constant double data types to the smoothie variables prices and
+		 * equaled them to the following prices for each (I exclude the “$” for now)*/
+		final double Berry_Banana_Price = 6.75;
+		final double Tropical_Price = 5.00;
+		final double GreenJolt_Price = 7.50;
+		
+		
+		
+	    Scanner smoothie = new Scanner(System.in);
+	    
+	 
+	    
+	    // Displayed the menu of smoothie options.
+	    System.out.println("Option        Type                Price\n"
+	    		           + "--------------------------------------------\n"
+	    				   + "1             Berry Banana        $6.75\n"
+	    		           + "2             Tropical            $5.00\n"
+	    				   + "3             Green Jolt          $7.50\n");
+	    // Prompt user to input smoothie option number of 1, 2, or 3.
+	    System.out.print("Enter smoothie option.");
+	    int type = smoothie.nextInt();
+	    float Smoothie_Price = 0;
+	    	
+	    if (!((type == 1) || (type == 2) || (type == 3))) {
+	    	System.out.print("invalid smoothie entry");
+	    	System.exit(0);
+	    }
+	    else if (type == 1) {
+	    	Smoothie_Price = (float) Berry_Banana_Price;
+	    	Smoothie_Choice = "Berry Banana";
+	    }
+	    else if (type == 2) {
+	    	Smoothie_Price = (float) Tropical_Price;
+	    	Smoothie_Choice = "Tropical";	
+	    } 
+	    else if (type == 3) {
+	    	Smoothie_Price = (float) GreenJolt_Price;
+	    	Smoothie_Choice = "GreenJolt Price";
+	    }
+	  
+	    /* I Assigned a string data types to an add-in choice variable and equal it to
+	     * an empty string.*/
+	    String Add_In_Choice = "";
+	    
+	    /* I assigned constant double data types to the add-in and no add-in price variable
+	     * prices and equal them to the following price for each (exclude “$” when
+	     * coding for now)*/
+	    final double Add_In_Price = 1.25;
+	    final double No_Add_In_Price = 0.00;
+	    
+	    // Displayed the menu of add-in options.
+	    System.out.println("Option        Add-In                Price\n"
+		           + "--------------------------------------------\n"
+				   + "1             No ad-in              $0.00\n"
+		           + "2             Almond Butter         $1.25\n"
+				   + "3             Lime Juice            $1.25\n");
+	    // Prompt user to input add-in option number of 1, 2, or 3.
+	    System.out.print("Enter add-n option.");
+	    int add_in = smoothie.nextInt();
+	    float Add_In_Price2 = 0;
+	    
+	    if (!((add_in == 1) || (add_in == 2) || (add_in == 3))) {
+	    	System.out.print("invalid add-in entry");
+	    	System.exit(0);
+	    }
+	    else if (add_in == 1) {
+	    	Add_In_Price2 = (float) No_Add_In_Price;
+	    	Add_In_Choice = "No add-in";	
+	    }
+	    else if (add_in == 2) {
+	    	Add_In_Price2 = (float) Add_In_Price;
+	    	Add_In_Choice = "Almond Butter";	
+	    } 
+	    else if (add_in == 3) {
+	    	Add_In_Price2 = (float) Add_In_Price;
+	    	Add_In_Choice = "Lime Juice";	
+	    }
+	    smoothie.close();
+	    
+	    // I then output the results along with the total price
+	    float TAX = (Smoothie_Price + Add_In_Price2) * (float) TAX_RATE;
+	    float Total_cost = Smoothie_Price + Add_In_Price2 + TAX;
+	    
+	    
+	    System.out.println("\n---------------------------------");
+	    System.out.print(Smoothie_Choice);
+	    System.out.printf("             $%.2f\n", Smoothie_Price);
+	    System.out.print(Add_In_Choice);
+	    System.out.printf("             $%.2f\n", Add_In_Price2);
+	    System.out.print("Taxes");
+	    System.out.printf("                 $%.2f\n", TAX);
+	    System.out.println("---------------------------------");
+	    System.out.printf("Total cost            $%.2f\n", Total_cost);  
+	}
+
+}
