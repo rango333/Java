@@ -1,0 +1,248 @@
+/*Name: Max Santomauro
+* Class: CS1150 #007
+* Due: Dec 10, 2024*/
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
+// Write code to create the following class hierarchy in which the superclass is Animal
+// and the subclasses are Bear, Elephant, Monkey, and Sloth
+
+public class SantomauroMaxAssignment12 {
+
+	public static void main(String[] args) throws IOException {
+		// Setup the file reference variable to refer to the text file
+		File inputFileName = new File("Animals.txt");
+		
+		// Open the file for reading by creating a scanner for the file
+		Scanner inputFile = new Scanner (inputFileName);
+		
+		// Read the first line with the number 7 from the Animal.txt file
+		int numAnimals = inputFile.nextInt();
+		
+		// Create an array to store the Animal objects
+		Animal[] animals = new Animal[numAnimals];
+		
+		// Loop through each animal's information and store Animal objects
+		while(inputFile.hasNextLine()) {
+			for (int i = 0; i < numAnimals; i++) {
+				// Read the animal type
+				String type = inputFile.next().trim();
+			
+				// Read the animal's name
+				String name = inputFile.next();
+			
+				// Read what the animal eats
+				String eat = inputFile.next();
+			
+				// Read the animal weight
+				int weight = inputFile.nextInt();
+			
+				// Read the animal's sleep amount
+				int sleep = inputFile.nextInt();
+			
+				// Read the animal's location
+				String location = inputFile.nextLine();
+				
+				// Use if/else if conditions to determine the animal type and store the objects 
+				if (type.equals("Bear")) {
+					animals[i] = new Bear(name, eat, weight, sleep, location);	
+				}
+				else if (type.equals("Elephant")) {
+					animals[i] = new Elephant(name, eat, weight, sleep, location);
+				}
+				else if (type.equals("Monkey")) {
+					animals[i] = new Monkey(name, eat, weight, sleep, location);
+				}
+				else if (type.equals("Sloth")) {
+					animals[i] = new Sloth(name, eat, weight, sleep, location);
+				}	
+			}
+		}
+		
+		// Close the Scanner
+        inputFile.close();
+        
+        for (int i = 0; i < animals.length; i++) {
+			Animal animal = animals[i];
+		
+			if (animal instanceof Bear) {
+				System.out.println("Animal[" + i + "] is a Bear");
+				System.out.println(animal.toString());
+				animal.eat();
+				animal.sleep();
+				animal.swim();
+			}
+			else if (animal instanceof Elephant) {
+				System.out.println("Animal[" + i + "] is a Elephant");
+				System.out.println(animal.toString());
+				animal.eat();
+				animal.sleep();
+				animal.swim();
+			}
+			else if (animal instanceof Monkey) {
+				System.out.println("Animal[" + i + "] is a Monkey");
+				System.out.println(animal.toString());
+				animal.eat();
+				animal.sleep();
+				animal.swim();
+			}
+			else if (animal instanceof Sloth) {
+				System.out.println("Animal[" + i + "] is a Sloth");
+				System.out.println(animal.toString());
+				animal.eat();
+				animal.sleep();
+				animal.swim();
+			}
+			
+		}
+	}
+}
+
+// Create a superclass called Animal
+class Animal {
+	// Create a private field with these instance variables along with their data type:
+	// String name, String food, int weight, int sleep, and String location
+	private String name;
+	private String food;
+	private int weight;
+	private int sleep;
+	private String location;
+	
+	// Create a constructor called public Animal that takes in all 5 private field variables
+	public Animal(String name, String food, int weight, int sleep, String location) {
+		// Initializing all private data fields to incoming values
+		this.name = name;
+		this.food = food;
+		this.weight = weight;
+		this.sleep = sleep;
+		this.location = location;
+	}
+	
+	// Do a getter for each instance variable
+	public String getName() {
+		return name;
+	}
+	public String getFood() {
+		return food;
+	}
+	public int getWeight() {
+		return weight;
+	}
+	public int getSleep() {
+		return sleep;
+	}
+	public String getLocation() {
+		return location;
+	}
+	
+	// Create a public void method that displays “Animal is eating”
+	public void eat() {
+		System.out.println("Animal is eating");
+	}
+	// Create a public void method that displays “Animal is sleeping”
+	public void sleep() {
+		System.out.println("Animal is sleeping - do not disturb");
+	}
+	// Create a public void method that displays “Animal is swimming”
+	public void swim() {
+		System.out.println("Animal is swimming\n");
+	}
+	
+	// toString method
+    @Override
+    public String toString() {
+        return "Name: " + name + " - Weighs: " + weight + " lbs - Sleeps: " + sleep + " hours - Location: " + location;
+    }
+}
+
+// When creating each subclasses below:
+// 1) Display method action (e.g., "Bear is swimming")
+// 2) For eat and sleep methods, include the food & sleep hours for the animal (e.g. “Bear is eating Bamboo”)
+
+
+// Create a subclass of Animal called Bear
+class Bear extends Animal {
+	// Create a public constructor called Bear that takes in all 5 private field variables
+	public Bear(String name, String food, int weight, int sleep, String location) {
+		super(name, food, weight, sleep, location);
+	}
+	
+	// toString method	
+	@Override
+	public String toString() {
+        return "Bear Name: " + getName() + " - Weighs: " + getWeight() + " lbs - Sleeps: " + getSleep() + " hours - Location: " + getLocation();
+    }
+	
+	// Use an eat, sleep, and swim method
+	@Override
+	public void eat() {
+		System.out.println("Bear is eating " + getFood());
+	}
+		
+	@Override
+	public void sleep() {
+		System.out.println("Bear is sleeping " + getSleep());	
+	}
+		
+	@Override
+	public void swim() {
+		System.out.println("Bear is swimming\n");	
+	}
+}
+
+// Create a subclass of Animal called Elephant
+class Elephant extends Animal {
+	// Create a public constructor called Elephant that takes in all 5 private field variables
+	public Elephant(String name, String food, int weight, int sleep, String location) {
+		super(name, food, weight, sleep, location);
+	}
+	
+	// toString method
+	@Override
+	public String toString() {
+        return "Elephant Name: " + getName() + " - Weighs: " + getWeight() + " lbs - Sleeps: " + getSleep() + " hours - Location: " + getLocation();
+    }
+	
+	// Use only a sleep method
+	@Override
+	public void sleep() {
+		System.out.println("Elephant is sleeping " + getSleep());	
+	}
+}
+
+// Create a subclass of Animal called Monkey
+class Monkey extends Animal {
+	// Create a public constructor called Monkey that takes in all 5 private field variables
+	public Monkey(String name, String food, int weight, int sleep, String location) {
+		super(name, food, weight, sleep, location);
+	}
+	
+	// toString method
+	public String toString() {
+		return "Monkey Name: " + getName() + " - Weighs: " + getWeight() + " lbs - Sleeps: " + getSleep() + " hours - Location: " + getLocation();
+	}
+	
+	// Use an eat and swim method
+	@Override
+	public void eat() {
+		System.out.println("Monkey is eating " + getFood());	
+	}				
+	@Override
+	public void swim() {
+		System.out.println("Monkey is swimming\n");	
+	}
+}
+
+// Create a subclass of Animal called Sloth
+class Sloth extends Animal {
+	// Create a public constructor called Sloth that takes in all 5 private field variables
+	public Sloth(String name, String food, int weight, int sleep, String location) {
+		super(name, food, weight, sleep, location);
+	}
+	
+	// toString method
+	public String toString() {
+        return "Sloth Name: " + getName() + " - Weighs: " + getWeight() + " lbs - Sleeps: " + getSleep() + " hours - Location: " + getLocation();
+    }
+}
