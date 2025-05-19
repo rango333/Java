@@ -1,0 +1,383 @@
+// Max Santomauro
+
+/*The purpose of this program is the implementation of a single-linked list and double-linked list
+ * with methods to add, remove, and display methods. The program is based on rail cars being 
+ * assembled to a train in New York and has a final destination at Palm Beach, Florida. All the
+ * rail cars that match intermediate destinations are removed and are completely removed at
+ * Palm Beach. The intermediate destinations are Washington DC, Charleston, and Orlando. The train
+ * carts are carrying crazy parrots.
+*/ 
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class SantomauroMaxAssignment9 {
+
+	public static void main(String[] args) throws IOException {
+		// Creates a new File object for the file named Railcars.txt
+		File railCarsFile = new File("Railcars.txt");
+		
+		// Create a scanner for the file
+		Scanner railCarsScanner = new Scanner(railCarsFile);
+		
+		// Create instance of single linked list class
+		TrainLinkedList singleLinkedList = new TrainLinkedList();
+		
+		// Create instance of double linked list class
+		DoubleLinkedList doubleLinkedList = new DoubleLinkedList();
+		
+		// Fill the single and double link lists with the variables from the file
+		while(railCarsScanner.hasNextLine()) {
+			int number = railCarsScanner.nextInt();
+			String freight = railCarsScanner.next();
+			String destination = railCarsScanner.nextLine().trim();
+			
+			// Create instance of RailCar object
+			RailCar railCars = new RailCar(number, freight, destination);
+			
+			// Add rail car object to single linked list using addByDestination method
+			singleLinkedList.addByDestination(railCars);
+			
+			// Add rail car object to end of double linked list using addToEnd method
+			doubleLinkedList.addToEnd(railCars);	
+		}
+		
+		railCarsScanner.close(); // Close the Railcars.txt file
+		
+		// Display rail car's number, freight, and destination city based on priority
+		System.out.println("RailCar         Freight         Destination City\r\n"
+						+ "--------------------------------------------------");
+		singleLinkedList.displayTrain();
+		
+		// Display rail cars removed at each destination
+		// Create a string array variable prioritizing destinations
+        String[] destinations = {"Washington DC", "Charleston", "Orlando", "West Palm Beach"};
+        for (int i = 0; i < destinations.length; i++) {
+        	// Assign to a created integer variable the removeByDestination method in the
+        	// TrainLinkedList class & have it take in an element at index i of the
+        	// string array variable.
+        	int removedRailCar = singleLinkedList.removeByDestination(destinations[i]);
+        	if(destinations[i] != "Orlando") {
+        		System.out.print("\n\nStop " + (i + 1) + ": Train Arrives in " + destinations[i] 
+        				+ "\nRemoved " + removedRailCar + " " + destinations[i] + " rail cars");
+        		if(destinations[i] == "West Palm Beach") {
+        			System.out.print(" - train should be empty!");
+        		}
+        		System.out.print("\n");
+            	System.out.println("\nRailCar#	Freight	Destination City\r\n"
+            			+ "----------------------------------------------------------------");
+            	singleLinkedList.displayTrain();
+            } else {
+            	int removedRailCar2 = singleLinkedList.removeByFreight("parrots");
+            	
+            	System.out.println("\n\nStop " + (i + 1) + ": Train Arrives in " + destinations[i] 
+        				+ "\nRemoved " + removedRailCar2 + " " + destinations[i] 
+        				+ " rail cars");
+            	System.out.println("Removed " + removedRailCar2 + " rail cars with parrot");
+            	System.out.println("\nRailCar#	Freight	Destination City\r\n"
+            			+ "----------------------------------------------------------------");
+            	singleLinkedList.displayTrain();
+            }
+        }
+		
+        // Display rail car's number, freight, and destination city backwards
+		System.out.println("\n\n\n\nRail Cars in Doubly Linked List - Printed Backwards\r\n\n"
+				+ "RailCar#	Freight	Destination City\r\n"
+				+ "----------------------------------------------------------------");		
+		doubleLinkedList.displayBackwards();			
+	}
+}
+
+// Create a class that represents one rail car and implements Comparable
+class RailCar implements Comparable<RailCar> {
+	// Create private data fields here
+	int number; // Indicates rail car's number
+	String freight = ""; // Represents type of freight loaded in rail car
+	String destination = ""; // Represents rail car's destinatio n city
+	
+	// Create constructorr that takes in number, freight, and destination
+	public RailCar(int number, String freight, String destination) {
+		// Initialize instances
+		this.number = number;
+		this.freight = freight;
+		this.destination = destination;
+	}
+	
+	// Create getters for freight and destination
+	public String getFreight() {
+		return freight;
+	}
+	public String getDestination() {
+		return destination;
+	}
+	// Create a toString method that returns a string of the rail car number, freight, and destination
+	
+	public String toString() {
+		return String.format("%d		%-10s   	%-15s", number, freight, destination);
+	}
+	
+	// Create a compartTo method that return the indication of whether the rail car should be in
+	// front of or behind the rail car that it's compared to or if they have the same destination
+	public int compareTo(RailCar otherRailCar) {
+		// Create a variable to store the current rail car in and another variable
+		// to store the incoming rail car in. 
+		String thisDestination = this.getDestination();
+		String otherDestination = otherRailCar.getDestination();
+		
+		if(thisDestination.equals(otherDestination)) {
+			return 0;
+		}
+		
+		// Washington DC has the highest priority
+		else if (thisDestination.equals("Washington DC")) {
+            return 1;
+        }
+		else if(thisDestination.equals("Charleston")) {
+			if (otherDestination.equals("Orlando") || otherDestination.equals("West Palm Beach")) {
+				return 1;
+			} else {
+				return -1;
+			}	
+		}	
+		else if(thisDestination.equals("Orlando")) {
+			if(otherDestination.equals("West Palm Beach")) {
+				return 1;
+			} else {
+				return -1;
+			}	
+		}
+		else if (thisDestination.equals("West Palm Beach")) {
+			return -1;
+		}
+		
+		return 0; // If locations don't match to any known ones    
+	}
+}
+
+// Create a class that uses single linked list and nodes to manipulate rail cars
+class TrainLinkedList {
+	// Create private data field here
+    private Node head; // Create reference to first node in linked list
+
+    // Create method that takes in an object that's an instance of RailCar and adds rail
+    // cars based on priority order.
+    // Make use of the compareTo method for finding correct location to insert new rail car
+    public void addByDestination (RailCar railCarToAdd) {
+    	// Create a new node contains the rail car
+    	Node newNode = new Node(railCarToAdd);
+    	
+    	// Use if/else condition and a while loop to determine if the list is empty or if the new rail car
+    	// should come before the head node
+    	if (head == null || railCarToAdd.compareTo(head.data) < 0) {
+            newNode.next = head;
+            head = newNode;
+        } else {
+            Node current = head;
+            Node nextNode = current.next;
+            
+            while (nextNode != null && nextNode.next != null 
+            		&& railCarToAdd.compareTo(nextNode.data) >= 0) {
+                current = nextNode;
+                nextNode = current.next;
+            }
+            
+            newNode.next = current.next;
+            current.next = newNode;
+        }
+    }
+    
+    // Create method to remove all rail cars from the linked list with the incoming specific destination
+    public int removeByDestination(String destination) {
+    	int count = 0; // Used to report # of rail cars removed
+    	
+    	while (head != null && head.data.getDestination().equals(destination)) {
+            head = head.next;
+            count++;
+        }
+    	
+    	Node current = head;
+    	while (current != null && current.next != null) {
+    	    Node nextNode = current.next;
+    	    if (nextNode.data.getDestination().equals(destination)) { 
+    	        current.next = nextNode.next;
+    	        count++;
+    	    } else {
+    	        current = current.next;
+    	    }
+    	}
+
+    	return count;
+    }
+    
+    // Create method to remove all rail cars from the linked list with the incoming specific freight
+    public int removeByFreight(String freight) {
+    	int count = 0; // Used to report # of rail cars removed
+    	
+    	while (head != null && head.data.getFreight().equals(freight)) {
+            head = head.next;
+            count++;
+        }
+
+    	Node current = head;
+        while (current != null && current.next != null) {
+        	Node nextNode = current.next;
+            if (nextNode.data.getFreight().equals(freight)) {
+                current.next = nextNode.next;
+                count++;
+            } else {
+                current = current.next;
+            }
+        }
+
+    	return count;
+    }
+    
+    // Create void method for displaying rail cars from the head of the linked list to the end.
+    public void displayTrain() {
+    	Node current = head;
+        while (current != null) {
+            System.out.println(current.data.toString());
+            current = current.next;
+        }
+    }
+    
+    // Create a private static node class that represents one node in the linked list
+    private static class Node {
+    	// Create private data field here
+    	private RailCar data; // Rail car stored in this node
+        private Node next; // Reference to next node in list
+        
+        // Create constructor that takes in rail cars and initialize all private data field variables
+        public Node(RailCar data) {
+        	this.data = data;
+        	this.next = null;
+        }
+    }
+}
+
+//Create a class that uses double linked list and nodes to manipulate rail car
+class DoubleLinkedList {
+	// Create private data field here
+	private Node head; // Reference to 1st node in linked list
+    private Node tail; // Reference to last node of linked list
+
+    // Create a method that adds the rail cars to the end of the double linked list
+    public void addToEnd (RailCar railCarToAdd) {
+    	// Create an object instance of Node that takes in rail cars
+    	Node newNode = new Node(railCarToAdd);
+    	
+    	// Create if/else conditions that sets both head and tail to the new node
+    	if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else { 
+            tail.next = newNode;
+            newNode.previous = tail;
+            tail = newNode;
+        }
+    }
+	
+    // Create a void method for displaying the rail cars from tail to head (backwards)
+    public void displayBackwards() {
+    	Node current = tail;
+        while (current != null) {
+            System.out.println(current.data.toString());
+            current = current.previous;
+        }
+    }
+
+	// Create a private static node class that represents one node in the linked list
+	private static class Node {
+		// Create private data field here
+		private RailCar data; // Rail car stored in this node
+        private Node next; // Reference to next node in list
+        private Node previous; // Reference to previous node in list
+
+     // Create constructor and initialize all private data field variables
+        public Node(RailCar data) {
+            this.data = data;
+            this.next = null;
+            this.previous = null;
+        }
+	}
+}
+
+/* --------------------------------------  OUTPUT------------------------------------------
+ * RailCar         Freight         Destination City
+--------------------------------------------------
+521		parrots      	West Palm Beach
+500		coal         	West Palm Beach
+507		autos        	West Palm Beach
+562		parrots      	West Palm Beach
+214		coal         	Orlando        
+245		parrots      	Orlando        
+817		military     	Charleston     
+814		autos        	Charleston     
+108		autos        	Washington DC  
+117		coal         	Washington DC  
+109		military     	Washington DC  
+
+
+Stop 1: Train Arrives in Washington DC
+Removed 3 Washington DC rail cars
+
+RailCar#	Freight	Destination City
+----------------------------------------------------------------
+521		parrots      	West Palm Beach
+500		coal         	West Palm Beach
+507		autos        	West Palm Beach
+562		parrots      	West Palm Beach
+214		coal         	Orlando        
+245		parrots      	Orlando        
+817		military     	Charleston     
+814		autos        	Charleston     
+
+
+Stop 2: Train Arrives in Charleston
+Removed 2 Charleston rail cars
+
+RailCar#	Freight	Destination City
+----------------------------------------------------------------
+521		parrots      	West Palm Beach
+500		coal         	West Palm Beach
+507		autos        	West Palm Beach
+562		parrots      	West Palm Beach
+214		coal         	Orlando        
+245		parrots      	Orlando        
+
+
+Stop 3: Train Arrives in Orlando
+Removed 2 Orlando rail cars
+Removed 2 rail cars with parrot
+
+RailCar#	Freight	Destination City
+----------------------------------------------------------------
+500		coal         	West Palm Beach
+507		autos        	West Palm Beach
+
+
+Stop 4: Train Arrives in West Palm Beach
+Removed 2 West Palm Beach rail cars - train should be empty!
+
+RailCar#	Freight	Destination City
+----------------------------------------------------------------
+
+
+
+
+Rail Cars in Doubly Linked List - Printed Backwards
+
+RailCar#	Freight	Destination City
+----------------------------------------------------------------
+117		coal         	Washington DC  
+562		parrots      	West Palm Beach
+507		autos        	West Palm Beach
+108		autos        	Washington DC  
+814		autos        	Charleston     
+245		parrots      	Orlando        
+214		coal         	Orlando        
+500		coal         	West Palm Beach
+817		military     	Charleston     
+521		parrots      	West Palm Beach
+109		military     	Washington DC */
