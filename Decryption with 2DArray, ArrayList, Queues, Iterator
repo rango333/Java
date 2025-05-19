@@ -1,0 +1,215 @@
+// Max Santomauro
+
+/* This program is about the decryption of a secret message left by traveling
+parrots with the use of a 2D array, array lists, queues, and iterators. The 
+purpose is to decrypt a message file using a key grid file and find the parrots.
+*/ 
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ArrayList;
+
+import java.util.Iterator;
+
+public class SantomauroMaxAssignment8 {
+
+	public static void main(String[] args) throws IOException {
+		// Creates a new File object that for each file named KeyGrid.txt,
+		// Message1.txt, and Message2.txt
+		File keyGridFile = new File("KeyGrid.txt");
+		File message1File = new File("Message1.txt");
+		File message2File = new File("Message2.txt");
+		
+		// Create a scanner for the files
+		Scanner gridKeyScanner = new Scanner(keyGridFile);
+		Scanner message1Scanner = new Scanner(message1File);
+		Scanner message2Scanner = new Scanner(message2File);
+		
+		// Read the key grid dimensions
+		int rows = gridKeyScanner.nextInt();
+		int cols = gridKeyScanner.nextInt();
+		gridKeyScanner.nextLine(); // Move to next line after reading demension
+		
+		// Fill the grid with characters from the key grid file
+		ArrayList<Character> characters = new ArrayList<>();
+		
+		while(gridKeyScanner.hasNextLine()) {
+			String line = gridKeyScanner.nextLine();
+            if (!line.trim().isEmpty()) {
+            	for (int i = 0; i < line.length(); i++) {
+            	    char character = line.charAt(i);
+            	    if (character != ' ') {
+                        characters.add(character);
+                    }
+            	}
+            }
+		}
+		
+		gridKeyScanner.close(); // Close the scanner for the Keygrid.txt file.
+		
+		// Create a key grid for decoding using the key grid demensions
+		DecodingMachine decodingMachine = new DecodingMachine(rows, cols);
+		
+		
+		// Fill the key grid with the characters from the KeyGrid.txt file
+		decodingMachine.fillKeyGrid(characters.iterator());
+		
+		// Display the key grid
+		System.out.println("Decoding Machine's Key Grid\r\n"
+				+ "---------------------------");
+		decodingMachine.printKeyGrid();
+		
+		
+		
+		// Create queues for both messages to store the KeyGridElement 
+		Queue<KeyGridElement> queue1 = new LinkedList<>();// Stores secret message in Message1.txt
+		Queue<KeyGridElement> queue2 = new LinkedList<>();// Stores secret message in Message2.txt
+		
+		// Fill the queue with the message from Message1.txt file
+		fillQueue(queue1, message1Scanner);
+		
+		// Create an iterator for Message1.txt that traverse through the key elements
+		// in the queue one by one
+		Iterator<KeyGridElement> message1Decoded = queue1.iterator();
+		
+		// Create an iterator for Message1.txt that traverse through the characters
+		// in the queue one by one
+		Iterator<Character> messageDecoded = decodingMachine.decodeMessage(message1Decoded);
+		 
+		// Display the coded message for Message1.txt file
+		System.out.println("1st Secret Decoded Message\r\n"
+				+ "--------------------------------------------------------------------");
+		while(messageDecoded.hasNext()) {
+			System.out.print(messageDecoded.next());
+		}
+		 
+		// Fill the queue with the message from Message2.txt file
+		fillQueue(queue2, message2Scanner);
+		 
+		// Create an iterator for Message2.txt that traverse through the elements
+		// in the queue one by one  
+		Iterator<KeyGridElement> mesaage2Decoded = queue2.iterator();
+		
+		// Create an iterator for Message2.txt that traverse through the characters
+		// in the queue one by one
+		messageDecoded = decodingMachine.decodeMessage(mesaage2Decoded);
+		  
+		// Display the coded message for Message2.txt file
+		System.out.println("\n\n2st Secret Decoded Message\r\n"
+				+ "--------------------------------------------------------------------");
+		while(messageDecoded.hasNext()) {
+			System.out.print(messageDecoded.next());
+		}
+		 
+	} // main end
+	
+	// Create a method for filling the queues with the message file values
+	public static void fillQueue(Queue<KeyGridElement> aQueue, Scanner messageFile) {
+		// Fill the queue with a while loop 
+		while(messageFile.hasNextLine()) {
+			int row = messageFile.nextInt();
+			int col = messageFile.nextInt();
+			aQueue.add(new KeyGridElement(row, col));				
+		}
+		
+		messageFile.close(); // close message files
+	} // fillQueue end
+	
+}
+
+// Create a class that presents the location (row/column) of one character in the key grid.
+class KeyGridElement {
+	// Create private data field here
+	private int row;
+	private int column;
+	
+	// Create a public constructor method that takes in the row and column values & initializes them
+	public KeyGridElement(int row, int column) {
+		this.row = row;
+		this.column = column;
+	}
+	
+	// Create getters for row and Column 
+	public int getRow() {
+		return row;
+	}
+	public int getColumn() {
+		return column;
+	}
+} // KeyGridElement end
+
+// Create a class for decoding secret messages
+class DecodingMachine {
+	// Create private data field here
+	 private char[][] keyGrid;
+	 private int numRows;
+	 private int numCols;
+	 
+	 // Create a public constructor that takes in numRows and numCols and initializes them
+	 public DecodingMachine(int numRows, int numCols) {
+		 this.numRows = numRows;
+		 this.numCols = numCols;
+		 this.keyGrid = new char[numRows][numCols]; // 2D array of characters of size numRows by numCols
+	 }
+	 
+	 // Create method that takes in the the 2D array and fills it with the key used to decode messages.
+	 public void fillKeyGrid(Iterator<Character> charIterator) {
+		// Iterate through the 2D array and fill it with characters from the iterator
+		for (int i = 0; i < numRows; i++) {  
+			for (int j = 0; j < numCols; j++) { 
+				if (charIterator.hasNext()) {
+					keyGrid[i][j] = charIterator.next();
+				} 
+			}
+		}
+	 } // fillKeyGrid end 
+	 
+	 // Create method that takes in the the 2D array and decodes the message.
+	 public Iterator<Character> decodeMessage( Iterator<KeyGridElement> msgIterator) {
+		 List<Character> secretMessage = new ArrayList<>();
+		 
+		 while(msgIterator.hasNext()) {
+			 KeyGridElement character = msgIterator.next();
+			 int row = character.getRow();
+			 int col = character.getColumn();
+			 
+			 if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
+				 secretMessage.add(keyGrid[row][col]);
+			 }
+		 }	 
+		 return secretMessage.iterator();
+	 }
+	 
+	 // Create a method that prints every character in the 2D array key grid row by row
+	 public void printKeyGrid() {
+		 for(int i = 0; i < keyGrid.length; i++) {
+			 for(int j = 0; j < keyGrid[i].length; j++) {
+				 System.out.print(keyGrid[i][j] + " ");
+			 }
+			 System.out.println();
+		 }
+		 System.out.println();
+	 }		
+} // DecodingMachine end
+
+/* --------------------------------------  OUTPUT------------------------------------------
+ * Decoding Machine's Key Grid
+---------------------------
+- T h e - q u i c 
+k - b r o w n - f 
+o x - j u m p s - 
+o v e r - t h e - 
+l a z y - d o g ! 
+
+1st Secret Decoded Message
+--------------------------------------------------------------------
+code-worked
+
+2st Secret Decoded Message
+--------------------------------------------------------------------
+The-parrots-are-heading-to-florida-by-train-all-aboard!
+ */
